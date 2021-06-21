@@ -5,7 +5,6 @@
 int length=0;
 
 struct node{
-	struct node *prev;
 	int data;
 	struct node *next;
 };
@@ -13,43 +12,41 @@ struct node{
 void append(struct node **head, int value){
 	struct node *temp, *ptr;
 	temp = allot;
-	
-	temp->prev = NULL;
 	temp->data = value;
-	temp->next = NULL;
-	
+
 	if(*head==NULL){
 		*head = temp;
+		temp->next = *head;
 		length++;
 		return;
 	}
-	
 	ptr = *head;
-	while(ptr->next!=NULL){
+	while(ptr->next!=*head){
 		ptr = ptr->next;
 	}
 	ptr->next = temp;
-	temp->prev = ptr;	
+	temp->next = *head;
 	length++;
+//	printf("\n\n\t\tnext of last node(%d) is %d\n\n", temp->data, temp->next->data);
 }
 
 void prepend(struct node **head, int value){
 	struct node *temp, *ptr;
-	ptr = *head;
 	temp = allot;
-	
-	temp->prev = NULL;
 	temp->data = value;
-	temp->next = NULL;
-	
+
 	if(*head==NULL){
 		*head = temp;
+		temp->next = *head;
 		length++;
 		return;
 	}
-	
-	temp->next = ptr;
-	ptr->prev = temp;
+	ptr = *head;
+	while(ptr->next!=*head){
+		ptr = ptr->next;
+	}
+	ptr->next = temp;
+	temp->next = *head;
 	*head = temp;
 	length++;
 }
@@ -59,15 +56,16 @@ void insert(struct node **head, int pos, int value){
 	struct node *temp, *ptr;
 	temp = allot;
 	temp->data = value;
-	
+	ptr = *head;
+	for(i=0; i<pos-1; i++){
+		ptr = ptr->next;
+	}
+	temp->next = ptr;
 	ptr = *head;
 	for(i=0; i<pos-2; i++){
 		ptr = ptr->next;
 	}
-	temp->next = ptr->next;				//next of temp to pos
-	ptr->next->prev = temp;				//prev of pos to temp
-	temp->prev = ptr;					//prev of temp to pos-1(ptr)
-	ptr->next = temp;					//next of pos-1(ptr) to temp
+	ptr->next = temp;
 	length++;
 }
 
@@ -75,16 +73,9 @@ void delete(struct node **head, int pos){
 	int i;
 	struct node *ptr;
 	ptr = *head;
-	if(pos==1){
-		*head = ptr->next;
-		length--;
-		return;
-	}
-	else if(pos==length){
-		while(ptr->next->next!=NULL){
-			ptr = ptr->next;
-		}
-		ptr->next = NULL;
+	
+	if(ptr->next==*head){
+		*head==NULL;
 		length--;
 		return;
 	}
@@ -93,17 +84,17 @@ void delete(struct node **head, int pos){
 		ptr = ptr->next;
 	}
 	ptr->next = ptr->next->next;
-	length--;	
+	length--;
 }
 
 void show(struct node **head){
 	struct node *ptr;
 	ptr = *head;
 	printf("\n\t");
-	while(ptr!=NULL){
+	while(ptr->next!=*head){
 		printf("%d ", ptr->data);
 		ptr = ptr->next;
-	}printf("\tlength: %d\n", length);
+	}printf("%d\n", ptr->data);
 }
 
 int main(){
@@ -127,36 +118,33 @@ int main(){
 				break;
 			case 3:
 				if(head==NULL){
-					printf("\n\t\tEmpty list!\n");
+					printf("\n\t\tEmpty List!\n");
 					break;
 				}
 				printf("\n\tenter position and value to insert: ");
 				scanf("%d %d", &pos, &value);
-				if(pos<1 || pos>length){
+				if(pos<=1 || pos>length){
 					if(pos==1)
 						printf("\n\t\tto insert at position 1 use prepend option!\n");
+
 					else
-						printf("\n\t\tlist out of range!\n");
+						printf("\n\t\tlist index out of range!\n");
 					break;
 				}
 				insert(&head, pos, value);
-				break; 
+				break;
 			case 4:
 				if(head==NULL){
-					printf("\n\t\tEmpty list!\n");
+					printf("\n\t\tEmpty List!\n");
 					break;
 				}
 				printf("\n\tenter position to delete: ");
 				scanf("%d", &pos);
-				if(pos<1 || pos>length){
-					printf("\n\t\tlist out of range!\n");
-					break;
-				}
 				delete(&head, pos);
 				break;
 			case 5:
 				if(head==NULL){
-					printf("\n\t\tEmpty list!\n");
+					printf("\n\t\tEmpty List!\n");
 					break;
 				}
 				show(&head);

@@ -29,10 +29,6 @@ void show(struct node **head){
 	struct node *ptr;
 	ptr = *head;
 	printf("\n\t");
-	if(*head==NULL){
-		printf("Empty Stack!\n");
-		return;
-	}
 	while(ptr!=NULL){
 		printf("%d ", ptr->data);
 		ptr = ptr->link;
@@ -55,14 +51,14 @@ int main(){
 				break;
 			case 2:
 				if(head==NULL){
-					printf("\n\tEmpty Stack!\n");
+					printf("\n\t\tEmpty Stack!\n");
 					break;
 				}
 				pop(&head);
 				break;
 			case 3:
 				if(head==NULL){
-					printf("\n\tEmpty Stack!\n");
+					printf("\n\t\tEmpty Stack!\n");
 					break;
 				}
 				show(&head);
@@ -70,9 +66,10 @@ int main(){
 			case 4:
 				exit(0);
 			default:
-				printf("\nenter valid choice\n");
+				printf("\n\t\tenter valid choice!\n");
 		}
 	}
+	return 0;
 }
 
 

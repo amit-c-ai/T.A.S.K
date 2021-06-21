@@ -40,7 +40,7 @@ void prepend(struct node **head, int value){
 	length++;
 }
 
-void insert(struct node **head, int value, int pos){
+void insert(struct node **head, int pos, int value){
 	int i;
 	struct node *temp, *ptr;
 	temp = allot;
@@ -117,33 +117,37 @@ int main(){
 				break;
 			case 3:
 				if(head==NULL){
-					printf("\n\tEmpty list!\n");
+					printf("\n\t\tEmpty list!\n");
 					break;
 				}
 				printf("\n\tenter position and value to insert: ");
-				scanf("%d %d", &value, &pos);
-				if(pos<1 || pos>length){
-					printf("\n\twrong position!\n");
+				scanf("%d %d", &pos, &value);
+				if(pos<=1 || pos>length){
+					if(pos==1)
+						printf("\n\t\tto insert at position 1 use prepend option\n");
+
+					else
+						printf("\n\t\tlist index out of range!\n");
 					break;
 				}
-				insert(&head, value, pos);
+				insert(&head, pos, value);
 				break;
 			case 4:
 				if(head==NULL){
-					printf("\n\tEmpty list!\n");
+					printf("\n\t\tEmpty list!\n");
 					break;
 				}
 				printf("\n\tenter position of number to delete: ");
 				scanf("%d", &pos);
 				if(pos<1 || pos>length){
-					printf("\n\twrong position!\n");
+					printf("\n\t\tlist index out of range!\n");
 					break;
 				}
 				delete(&head, pos);
 				break;
 			case 5:
 				if(head==NULL){
-					printf("\n\tEmpty list!\n");
+					printf("\n\t\tEmpty list!\n");
 					break;
 				}
 				show(head);
@@ -151,7 +155,8 @@ int main(){
 			case 6:
 				exit(0);
 			default:
-				printf("\nenter valid choice\n");
+				printf("\n\t\tenter valid choice!\n");
 		}
 	}
+	return 0;
 }

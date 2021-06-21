@@ -2,35 +2,43 @@
 #include<stdlib.h>
 #include<stdbool.h>
 #define allot (struct node *)malloc(sizeof(struct node))
-int length=0;
 
 struct node{
+	struct node *prev;
 	int data;
-	struct node *link;
+	struct node *next;
 };
 
-void push(struct node **head, int value){
-	struct node *temp;
+void push(struct node **head, struct node **tail, int value){
+	struct node *temp, *ptr;
 	temp = allot;
-	
+	temp->prev = NULL;
 	temp->data = value;
-	temp->link = *head;
+	temp->next = NULL;
 	
-	*head = temp;
-	length++;
-}
-
-void pop(struct node **head){
-	struct node *ptr;
-	ptr = *head;
-	if(ptr->link==NULL){
-		*head=NULL;
+	if(*head==NULL){
+		*head = temp;
+		*tail = temp;
 		return;
 	}
-	while(ptr->link->link!=NULL){
-		ptr = ptr->link;
+	
+	ptr = *head;
+	temp->next = ptr;
+	ptr->prev = temp;
+	*head = temp;
+}
+
+void pop(struct node **tail, struct node **head){
+	struct node *last, *ptr;
+	ptr = *tail;	
+	if(ptr==*head){
+		*tail==NULL;
+		*head==NULL;
+		return;
 	}
-	ptr->link = NULL;
+	last = ptr->prev;
+	last->next = NULL;
+	*tail = last;
 }
 
 void show(struct node **head){
@@ -39,13 +47,13 @@ void show(struct node **head){
 	printf("\n\t");
 	while(ptr!=NULL){
 		printf("%d ", ptr->data);
-		ptr = ptr->link;
+		ptr = ptr->next;
 	}printf("\n");
 }
 
 int main(){
 	int choice, value;
-	struct node *head=NULL;
+	struct node *head=NULL, *tail=NULL;
 	
 	while(true){
 		printf("1. push\n2. pop\n3. show\n4. exit\nenter: ");
@@ -55,14 +63,14 @@ int main(){
 			case 1:
 				printf("\n\tenter value to push: ");
 				scanf("%d", &value);
-				push(&head, value);
+				push(&head, &tail, value);
 				break;
 			case 2:
 				if(head==NULL){
 					printf("\n\t\tEmpty Queue!\n");
 					break;
 				}
-				pop(&head);
+				pop(&tail, &head);
 				break;
 			case 3:
 				if(head==NULL){
