@@ -27,7 +27,6 @@ void append(struct node **head, int value){
 	ptr->next = temp;
 	temp->next = *head;
 	length++;
-//	printf("\n\n\t\tnext of last node(%d) is %d\n\n", temp->data, temp->next->data);
 }
 
 void prepend(struct node **head, int value){
@@ -75,7 +74,19 @@ void delete(struct node **head, int pos){
 	ptr = *head;
 	
 	if(ptr->next==*head){
-		*head==NULL;
+		*head=NULL;
+		length--;
+		return;
+	}
+	
+	if(pos==1){
+		struct node *last;
+		last = *head;
+		while(last->next!=*head){
+			last = last->next;
+		}
+		*head = ptr->next;
+		last->next = *head;
 		length--;
 		return;
 	}
@@ -140,6 +151,10 @@ int main(){
 				}
 				printf("\n\tenter position to delete: ");
 				scanf("%d", &pos);
+				if(pos<1 || pos>length){
+					printf("\n\t\tlist index out of range!\n");
+					break;
+				}
 				delete(&head, pos);
 				break;
 			case 5:
