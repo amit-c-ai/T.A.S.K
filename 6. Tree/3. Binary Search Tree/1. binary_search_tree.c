@@ -82,6 +82,7 @@ int main(){
 				root = insert(root, value);
 				break;
 			case 2:
+				printf("\nenter value to be deleted")
 				break;
 			case 3:
 				print2D(root);
